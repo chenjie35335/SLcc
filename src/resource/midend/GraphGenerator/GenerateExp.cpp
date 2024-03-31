@@ -318,7 +318,7 @@ void PrimaryExpAST::generateGraph(string &sign) const
 }
 
 void FuncExpAST::generateGraph(string &sign) const{
-  //cout << "function name = " << ident;
+  //cerr << "function name = " << ident << endl;
   RawFunctionP callee= signTable.getFunction(ident);
   vector<RawValueP> paramsValue;
   para->generateGraph(paramsValue);

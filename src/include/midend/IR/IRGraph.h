@@ -183,7 +183,7 @@ void generateRawValue(RawBasicBlock* &TargetBB);
 
 void createRawProgramme(RawProgramme *&Programme);
 
-void generateRawFunction(RawFunction *&function, const string &name,int type);
+void generateRawFunction(RawFunction *&function, const char *name,int type);
 
 void generateRawBasicBlock(RawBasicBlock *&bb, const char *name);
 

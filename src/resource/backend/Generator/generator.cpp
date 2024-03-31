@@ -116,7 +116,7 @@ void Visit(const RawJump &data, const RawValueP &value){
 //处理RawCall对象，a0和a1寄存器直接不使用
 //这里有个严重问题
 void Visit(const RawCall &data,const RawValueP &value) {
-    cout << endl;
+    //cout << endl;
     auto &params = data.args;
     for(int i = 0; i < params.len; i++) {
         auto ptr = reinterpret_cast<RawValueP>(params.buffer[i]);
@@ -132,7 +132,7 @@ void Visit(const RawCall &data,const RawValueP &value) {
             cout << "  sw  " << reg << ", " << offset << "(sp)" << endl;
         }
     }
-    cout << endl;
+    //cout << endl;
      for(int i = 0;i < 7;i++) {
          hardware.StoreReg(RegisterManager::callerSave[i]);
      }
@@ -269,6 +269,9 @@ void Visit(const RawBasicBlockP &bb){
 // Visit RawFunction
 void Visit(const RawFunctionP &func)
 {
+        int ParamLen = func->params.len;
+        int bbsLen = func->bbs.len;
+        if(bbsLen != 0) {
          hardware.init(func);
          printf("  .globl %s\n",func->name);
          printf("%s:\n",func->name);
@@ -286,7 +289,7 @@ void Visit(const RawFunctionP &func)
          Visit(func->params);
          Visit(func->bbs);
          cout << endl;
-       
+        }
 }
 //Visit RawSlice
 void Visit(const RawSlice &slice){

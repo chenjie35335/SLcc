@@ -260,7 +260,7 @@ void PushRawBasicBlock(RawBasicBlock *&bb) {
     bbs.buffer[bbs.len++] = (const void *)bb;
 }
 //初始化时不进行对于类型的操作，等到后面一起修改
-void generateRawFunction(RawFunction *&function, const string &name,int type) {
+void generateRawFunction(RawFunction *&function, const char *name,int type) {
     auto programme = getTempProgramme();
     auto &funcs = programme->Funcs;
     function = (RawFunction *) malloc(sizeof(RawFunction));
@@ -272,7 +272,9 @@ void generateRawFunction(RawFunction *&function, const string &name,int type) {
     params.kind = RSK_BASICVALUE;
     params.len = 0;
     params.buffer = (const void **) malloc(sizeof(const void *)*500);
-    function->name = name.c_str();
+    function->name = (char*) malloc(sizeof(char) *100);
+    char *sign = (char *)function->name;
+    strcpy(sign,name);
     RawType *ty = (RawType *) malloc(sizeof(RawType));
     ty->tag = RTT_FUNCTION;
     RawType *retTy = (RawType *) malloc(sizeof(RawType));

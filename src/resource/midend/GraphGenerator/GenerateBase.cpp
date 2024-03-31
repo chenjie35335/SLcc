@@ -1,6 +1,7 @@
 #include "../../../include/midend/IR/IRGraph.h"
 #include "../../../include/midend/IR/IRBuilder.h"
 #include "../../../include/midend/IR/ValueKind.h"
+#include "../../../include/midend/IR/LibFunction.h"
 #include "../../../include/midend/AST/ast.h"
 #include "../../../include/midend/ValueTable/SignTable.h"
 #include <cstdlib>
@@ -19,6 +20,12 @@ void CompUnitAST::generateGraph(RawProgramme *&IR) const {
 }
 
 void MultCompUnitAST::generateGraph() const{
+    GeneratePutch();
+    GeneratePutInt();
+    GenerateStartTime();
+    GenerateStopTime();
+    GenerateGetch();
+    GenerateGetInt();
     for(auto &sinComp : sinCompUnit) {
         sinComp->generateGraph();
     }
@@ -51,7 +58,7 @@ void FuncTypeAST::generateGraph(int &retType) const {
 //这里设置funcs的位置应该提前
 void FuncDefAST::generateGraph(int &retType) const{
     RawFunction* p;
-    generateRawFunction(p,ident,retType);
+    generateRawFunction(p,ident.c_str(),retType);
     signTable.identForward();
     RawBasicBlock *q;
     string FirstBB = "entry";
@@ -131,8 +138,12 @@ void StmtAST::generateGraph() const {
             generateRawValue(src,dest);
             break;
           }
-          case STMTAST_SINE: 
-              SinExp->generateGraph(); break; 
+          case STMTAST_SINE: {
+              //cerr << "enter sine" << endl;
+              string SinExpSign;
+              SinExp->generateGraph(SinExpSign); 
+              break; 
+          }
           case STMTAST_BLO: 
               Block->generateGraph();break;
           case STMTAST_IF:
