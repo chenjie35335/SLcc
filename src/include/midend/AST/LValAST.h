@@ -16,6 +16,8 @@ class LValRAST : public BaseAST {
         auto &tag = IdentSrc->value.tag;
         if(tag == RVT_INTEGER) {
           return IdentSrc->value.data.integer.value;
+        } else if(RVT_GLOBAL){
+          return IdentSrc->value.data.global.Init->value.data.integer.value;
         } else {
           cout << "non-const variable can't be assigned to a const variable" << endl;
           assert(0);

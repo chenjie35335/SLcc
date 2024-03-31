@@ -43,7 +43,7 @@ void SinCompUnitAST::generateGraph() const{
             constGlobal->generateGraph();
             break;
         case COMP_VAR:{
-            //varGlobal->Dump(DECL_GLOB);
+            varGlobal->generateGraphGlobal();
             break;
         }
         default:

@@ -42,12 +42,14 @@ class VarDeclAST : public BaseAST {
 public:
      unique_ptr <BaseAST> MulVarDef;
      void generateGraph() const override;
+     void generateGraphGlobal() const override;
 };
 
 class MulVarDefAST : public BaseAST {
 public:
     vector <unique_ptr<BaseAST>> SinValDef;
     void generateGraph() const override;
+    void generateGraphGlobal() const override;
 };
 
 class SinVarDefAST : public BaseAST {
@@ -57,6 +59,7 @@ public:
     unique_ptr<BaseAST>func_exp;
     uint32_t type; 
     void generateGraph() const override;
+    void generateGraphGlobal() const override;
 };
 
 class InitValAST : public BaseAST {

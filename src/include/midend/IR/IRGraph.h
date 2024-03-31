@@ -85,6 +85,10 @@ typedef struct {
 typedef struct {
     RawValueP src;
 } RawLoad;
+///
+typedef struct{
+    RawValueP Init;
+}RawGlobal;
 
 /// store
 typedef struct{
@@ -142,6 +146,7 @@ struct ValueKind {
         RawJump jump;
         RawCall call;
         RawFuncArgs funcArgs;
+        RawGlobal global;
         // 其他数据类型
     } data;
 };
@@ -188,5 +193,7 @@ void generateRawFunction(RawFunction *&function, const char *name,int type);
 void generateRawBasicBlock(RawBasicBlock *&bb, const char *name);
 
 void PushRawBasicBlock(RawBasicBlock *&bb);
+
+void generateRawValueGlobal(const char *name,int num);
 #endif
 

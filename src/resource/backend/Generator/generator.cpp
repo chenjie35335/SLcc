@@ -11,26 +11,35 @@ HardwareManager hardware;
 //处理load运算
 void Visit(const RawLoad &data, const RawValueP &value) {
     const auto &src = data.src;
-    if(!hardware.IsMemory(src)) {
-        assert(0);
-    }
-    else {
+    if(src->value.tag == RVT_GLOBAL) {
+        hardware.AllocRegister(value);
+        const char *TargetReg = hardware.GetRegister(value);
+        cout << "  la  " << TargetReg << ", " << src->name << endl;
+        cout << "  lw  " << TargetReg << ", " << 0 << '(' << TargetReg << ')' << endl;
+    } else if(hardware.IsMemory(src)){
         hardware.AllocRegister(value);
         const char *TargetReg = hardware.GetRegister(value);
         int srcAddress = hardware.getTargetOffset(src); //这里有点好，直接跳过了visit过程
         cout << "  lw  " << TargetReg << ", " << srcAddress << "(sp)" << endl;
+    } else {
+        assert(0);
     }
 }
 //处理store运算
 void Visit(const RawStore &data, const RawValueP &value) {
     const auto &src = data.value;
     const auto &dest= data.dest;
-    if(!hardware.IsMemory(dest)) assert(0);
-    else {
-        const char *SrcReg = hardware.GetRegister(src);
+    const char *SrcReg = hardware.GetRegister(src);
+    if(dest->value.tag == RVT_GLOBAL) {
+        hardware.AllocRegister(dest);
+        const char * DestReg = hardware.GetRegister(dest);
+        cout << "  la  " << DestReg << ", " << dest->name << endl;
+        cout << "  sw  " << SrcReg << ", " << 0 << '(' << DestReg << ')' << endl;
+    }
+    else if(hardware.IsMemory(dest)){
         int srcAddress = hardware.getTargetOffset(dest);
         cout << "  sw  " << SrcReg << ", " << srcAddress << "(sp)" << endl;
-    }
+    } else assert(0);
 }
 
 //处理二进制运算
@@ -157,6 +166,19 @@ void Visit(const RawFuncArgs &data,const RawValueP &value) {
         cout << "  sw  " << "t0"<< "," << addr << "(sp)" << endl;
     }
 }
+//处理Global Alloc变量
+void Visit(const RawGlobal &data,const RawValueP &value) {
+    int tag = data.Init->value.tag;
+    if(tag == RVT_INTEGER) {
+        int Init = data.Init->value.data.integer.value;
+        if(Init == 0) {
+            cout << "  .zero 4" << endl;
+        } else {
+            cout << "  .word " << Init << endl; 
+        }
+    } else assert(0);
+}
+
 //这个Value是重点，如果value已经被分配了寄存器，直接返回
 //如果存在内存当中，调用loadreg后直接返回
 //如果这个处于未分配时，这时应该是遍历的时候访问的，分配内存和寄存器
@@ -252,6 +274,14 @@ void Visit(const RawValueP &value) {
         Visit(args,value);
         break;
     }
+    case RVT_GLOBAL: {
+        const auto &global = kind.data.global;
+        cout << "  .globl " << value->name <<  endl;
+        cout << value->name << ":" << endl;
+        Visit(global,value);
+        cout << endl;
+        break;
+    }
     default:
         assert(false);
     }
@@ -316,6 +346,8 @@ void Visit(const RawSlice &slice){
 }
 
 void generateASM(RawProgramme *& value) {
+    cout << "  .data" << endl;
+    Visit(value->Value);
     cout << "  .text" << endl;
     Visit(value->Funcs);
 }

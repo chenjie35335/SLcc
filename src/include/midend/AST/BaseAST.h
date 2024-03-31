@@ -84,6 +84,7 @@ class BaseAST {
   virtual void generateGraph(int &retType) const{}
   virtual void generateGraph(vector<RawValueP> &params) const {}
   virtual void generateGraph(RawValueP &value) const {}
+  virtual void generateGraphGlobal() const{}
   virtual int calc() const { return 0; }
 };
 

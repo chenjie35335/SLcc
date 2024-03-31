@@ -15,7 +15,7 @@ void LValRAST::generateGraph(string &sign) const {
         case RVT_INTEGER:
             sign = to_string(IdentSrc->value.data.integer.value);
             break;
-        case RVT_ALLOC:
+        case RVT_ALLOC:case RVT_GLOBAL:
             alloc_now++;
             sign = "%"+to_string(alloc_now);
             generateRawValue(sign,IdentSrc);

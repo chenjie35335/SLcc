@@ -4,7 +4,8 @@
 #define IRBUILDER_STORMY
 //函数只需要连接就行，每次更换都返回函数进行
 //这三者之间本身是带有关系的，但是之后需要手动维持这种关系
-typedef struct{
+class IRBuilder{
+    public:
     /// 当前程序
     RawProgramme *tempProgramme;
     /// 当前函数
@@ -17,7 +18,13 @@ typedef struct{
     stack <RawBasicBlock *> WhileEntryRecord;
     /// 存储当年WhileEnd的指针
     stack <RawBasicBlock *> WhileEndRecord;
-}IRBuilder;
+
+    IRBuilder() {
+        tempProgramme = nullptr;
+        tempFunction = nullptr;
+        tempBasicBlock = nullptr;
+    }
+};
 /// @brief 获取当前程序
 /// @return 
 RawProgramme *getTempProgramme();

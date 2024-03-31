@@ -70,7 +70,6 @@ void generateRawValue(string &name, RawValueP lhs, RawValueP rhs, uint32_t op)
 void generateRawValue(int32_t number)
 {
         auto bb = getTempBasicBlock();
-        auto &insts = bb->insts;
         RawValue * value = (RawValue *)malloc(sizeof(RawValue));
         value->name = nullptr;
         value->value.tag = RVT_INTEGER;
@@ -78,7 +77,10 @@ void generateRawValue(int32_t number)
         RawType *ty = (RawType *) malloc(sizeof(RawType));
         ty->tag = RTT_INT32;
         value->ty = ty;
+        if(bb != nullptr) {
+        auto &insts = bb->insts;
         insts.buffer[insts.len++] = (const void *)value;
+        }
         signTable.insertNumber(number,value);
 }
 /// @brief store型value
@@ -294,4 +296,27 @@ void generateRawFunction(RawFunction *&function, const char *name,int type) {
     function->ty = ty;
     funcs.buffer[funcs.len++] = (const void *) function;
     setTempFunction(function);
+}
+//对于全局变量，只有初值是常量，其他如同其他变量一样，使用load或者store
+void generateRawValueGlobal(const char *name,int init) {
+    auto programme = getTempProgramme();
+    auto &values = programme->Value;
+    RawValue *global = (RawValue *)malloc(sizeof(RawValue));
+    RawType *ty = (RawType *) malloc(sizeof(RawType));
+    ty->tag = RTT_POINTER;
+    RawType *pointerTy = (RawType *) malloc(sizeof(RawType));
+    pointerTy->tag = RTT_INT32;
+    ty->data.pointer.base = pointerTy;
+    global->ty = (RawTypeP)ty;
+    global->value.tag = RVT_GLOBAL;
+    RawValue *initValue = (RawValue *) malloc(sizeof(RawValue));
+    initValue->ty = pointerTy;
+    initValue->value.tag = RVT_INTEGER;
+    initValue->value.data.integer.value = init;
+    global->value.data.global.Init = (RawValueP) initValue;
+    global->name = (char *) malloc(sizeof(char)*50);
+    char *sign = (char *)global->name;
+    strcpy(sign,name);
+    values.buffer[values.len++] = (const void *)global;
+    signTable.insertVar(name,global);
 }

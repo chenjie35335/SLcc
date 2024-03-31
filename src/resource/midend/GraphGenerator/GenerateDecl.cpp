@@ -33,6 +33,35 @@ void MulVarDefAST::generateGraph() const
         sinValDef->generateGraph();
     }
 }
+
+void VarDeclAST::generateGraphGlobal() const{
+    MulVarDef->generateGraphGlobal();
+}
+
+void MulVarDefAST::generateGraphGlobal() const
+{
+    for (auto &sinValDef : SinValDef){
+        sinValDef->generateGraphGlobal();
+    }
+}
+
+void SinVarDefAST::generateGraphGlobal() const {
+    string DestSign = ident;
+    signTable.varMultDef(ident);
+    switch(type) {
+    case SINVARDEFAST_UIN: {
+        generateRawValueGlobal(DestSign.c_str(),0);
+        break;
+    }
+    case SINVARDEFAST_INI: {//这里确实进行计算，但是和之前一样，如果不是常量就未定义
+        int value = InitVal->calc();
+        generateRawValueGlobal(DestSign.c_str(),value);
+        break;
+    }
+    default:
+    assert(0);
+}
+}//这里我会考虑直接计算出来，存在某处
 // 对于分配的变量来说，在遍历时候需要使用@ident_dep,但是identTable内需要用ident
 void SinVarDefAST::generateGraph() const
 {

@@ -60,6 +60,8 @@ enum {
     RVT_CALL,
     /// function args
     RVT_FUNC_ARGS,
+    /// global 
+    RVT_GLOBAL
 }RawValueTag;
 
 // kind of RawSlice
