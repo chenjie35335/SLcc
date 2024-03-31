@@ -73,4 +73,18 @@ class ConstExpAST : public BaseAST {
         return Exp->calc();
     }
 };
+
+class ConstArrayDefAST : public BaseAST {
+  public:
+    unique_ptr<BaseAST>Exp;
+    string ident;
+    unique_ptr<BaseAST>dimension;
+    unique_ptr<BaseAST>arrayVar;
+    void generateGraph(string &sign) const override;
+    [[nodiscard]] int calc() const override{
+        return Exp->calc();
+    }
+};
+
+
 #endif
