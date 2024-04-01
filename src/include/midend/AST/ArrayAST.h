@@ -1,13 +1,6 @@
-#include <iostream>
-#include <memory>
-#include <string>
-#include <cassert>
-#include <unordered_map>
-#include <vector>
-#include "../IR/IRGraph.h"
-#include "../IR/ValueKind.h"
 #include "BaseAST.h"
-
+#ifndef ARRAYAST_LXH
+#define ARRAYAST_LXH
 
 class ConstArrayDefAST : public BaseAST {
   public:
@@ -39,8 +32,6 @@ class ConstArrayVarAST : public BaseAST {
     int type;
     void generateGraph() const override;
 };
-
-
 
 class ArrayContentAST : public BaseAST {
   public:
@@ -75,6 +66,8 @@ class MulArrParaAST : public BaseAST {
     std::unique_ptr<BaseAST> para;
     void generateGraph() const override;
 };
+
+#endif
 
 
 

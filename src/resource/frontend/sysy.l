@@ -62,7 +62,7 @@ FloatNumber   ^[+-]?\d*\.?\d*(e|E)[+-]?\d+$
 {Decimal}       { yylval.int_val = strtol(yytext, nullptr, 0); return INT_CONST; }
 {Octal}         { yylval.int_val = strtol(yytext, nullptr, 0); return INT_CONST; }
 {Hexadecimal}   { yylval.int_val = strtol(yytext, nullptr, 0); return INT_CONST; }
-{FloatNumber}   { yylval.float_val = strtol{yytext, nullptr, 0}; return FLOAT_CONST; }
+{FloatNumber}   { yylval.float_val = strtol(yytext, nullptr, 0); return FLOAT_CONST; }
 
 .               { return yytext[0]; }
         

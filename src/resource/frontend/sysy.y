@@ -35,6 +35,7 @@ using namespace std;
 %union {
   std::string *str_val;
   int int_val;
+  float float_val;
   BaseAST *ast_val;
 }
 
@@ -58,7 +59,7 @@ using namespace std;
 %type <ast_val> ConstArrayDef ArrayDimen MulArrayDimen ConstArrayVar 
 %type <ast_val> ArrayContent MulArraycontent ArrPara MulArrPara
 %type <int_val> Number 
-%type <flaot_val> FloatNumber
+%type <float_val> FloatNumber
 
 %%
 
@@ -144,20 +145,20 @@ SinFuncFParam
   : ParaType IDENT {
     auto ast = new SinFuncFParamAST();
     ast->ident = *unique_ptr<string>($2);
-    ast->ParaType = unique_ptr<BaseAST>($1);
+    ast->paraType = unique_ptr<BaseAST>($1);
     ast->type = PARA_VAR;
     $$ = ast;
   } | ParaType IDENT '[' ']'  {
     auto ast = new SinFuncFParamAST();
     ast->ident = *unique_ptr<string>($2);
-    ast->ParaType = unique_ptr<BaseAST>($1);
+    ast->paraType = unique_ptr<BaseAST>($1);
     ast->type = PARA_ARR_SIN;
     $$ = ast;
   } | ParaType IDENT '[' ']' ArrayDimen {
     auto ast = new SinFuncFParamAST();
     ast->ident = *unique_ptr<string>($2);
-    ast->ParaType = unique_ptr<BaseAST>($1);
-    ast->Dimen = unique_ptr<BaseAST>($5);
+    ast->paraType = unique_ptr<BaseAST>($1);
+    ast->arrayDimen = unique_ptr<BaseAST>($5);
     ast->type = PARA_ARR_MUL;
     $$ = ast;
   }
@@ -776,8 +777,13 @@ PrimaryExp
   } | Number {
     auto ast  = new PrimaryExpAST();
     ast->kind = NUMBER;
-    ast->number = $1;
+    ast->number = unique_ptr<BaseAST>($1);
     ast->Exp = nullptr;
+    $$ = ast;
+  } | FloatNumber {
+    auto ast = new PrimaryExpAST();
+    ast->kind = FLOAT;
+    ast->floatNumber = unique_ptr<BaseAST>($1);
     $$ = ast;
   }
   ;
@@ -785,10 +791,13 @@ PrimaryExp
 Number
   : INT_CONST {
     $$ = $1;
-  } | FLOAT_CONST {
-    $$ = $1;
   }
   ;
+
+FloatNumber
+  : FLOAT_CONST {
+    $$ = $1;
+  }
 
 //using our function
 UnaryExp 
@@ -851,12 +860,7 @@ SinParams
     ast->dimension = unique_ptr<BaseAST>($4);
     ast->type = 3;
     $$ = ast;
-  } | IDENT {
-    auto ast = new SinParamsAST();
-    ast->ident = *unique_ptr<string>($1);
-    ast->type = 4;
-    $$ = ast;
-  }
+  } 
   ;
 
 UnaryOp
