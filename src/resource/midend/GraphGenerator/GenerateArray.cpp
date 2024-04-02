@@ -2,7 +2,6 @@
 #include "../../../include/midend/IR/IRBuilder.h"
 #include "../../../include/midend/IR/ValueKind.h"
 #include "../../../include/midend/AST/ast.h"
-#include "../../../include/midend/AST/Array.h"
 #include "../../../include/midend/ValueTable/SignTable.h"
 #include <cstdlib>
 #include <unordered_map>

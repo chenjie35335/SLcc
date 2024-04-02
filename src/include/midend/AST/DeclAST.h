@@ -5,6 +5,7 @@ class DeclAST : public BaseAST {
   public:
     std::unique_ptr<BaseAST> ConstDecl;
     std::unique_ptr<BaseAST> VarDecl;
+    std::unique_ptr<BaseAST> arrDef;
     uint32_t type;
     void generateGraph() const override;
 };
@@ -13,6 +14,8 @@ class ConstDeclAST : public BaseAST {
   public:
     std::unique_ptr<BaseAST> Btype;
     std::unique_ptr<BaseAST> MulConstDef;
+    std::unique_ptr<BaseAST> arrDef;
+    int type;
     void generateGraph() const override; 
 };
 
@@ -35,6 +38,8 @@ class SinConstDefAST : public BaseAST{
   public:
     string ident;
     unique_ptr<BaseAST>ConstExp;
+    unique_ptr<BaseAST>def;
+    int type;
     void generateGraph() const override;
 };
 
@@ -55,6 +60,9 @@ public:
     string ident;
     unique_ptr<BaseAST>InitVal;
     unique_ptr<BaseAST>func_exp;
+    unique_ptr<BaseAST>dimen;
+    unique_ptr<BaseAST>constInit;
+    int number;
     uint32_t type; 
     void generateGraph() const override;
 };
@@ -74,17 +82,7 @@ class ConstExpAST : public BaseAST {
     }
 };
 
-class ConstArrayDefAST : public BaseAST {
-  public:
-    unique_ptr<BaseAST>Exp;
-    string ident;
-    unique_ptr<BaseAST>dimension;
-    unique_ptr<BaseAST>arrayVar;
-    void generateGraph(string &sign) const override;
-    [[nodiscard]] int calc() const override{
-        return Exp->calc();
-    }
-};
+
 
 
 #endif

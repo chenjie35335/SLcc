@@ -11,6 +11,8 @@ class LValLAST : public BaseAST {
 class LValRAST : public BaseAST {
   public:
     string ident;
+    unique_ptr<BaseAST> array;
+    int type;
     int calc() const override {
         RawValueP IdentSrc = signTable.getVarR(ident);
         auto &tag = IdentSrc->value.tag;

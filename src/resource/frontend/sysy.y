@@ -185,9 +185,11 @@ FuncType
 ParaType 
   : INT {
     auto ast = new ParaTypeAST();
+    ast->type = TYPE_INT;
     $$ = ast;
   } | FLOAT {
     auto ast = new ParaTypeAST();
+    ast->type = TYPE_FLOAT;
     $$ = ast;
   }
   ;
@@ -247,6 +249,7 @@ SinConstDef
       auto ast      = new SinConstDefAST();
       ast->ident    = *unique_ptr<string>($1);
       ast->ConstExp = unique_ptr<BaseAST>($3);
+      ast->type = 0;
       $$            = ast;
   } | ConstArrayDef {
     auto ast = new SinConstDefAST();
@@ -405,7 +408,7 @@ SinVarDef
     ast->type = SINVARDEFAST_INI_ARR;
     ast->ident = *unique_ptr<string>($1);
     ast->dimen = unique_ptr<BaseAST>($2);
-    ast->ConstInit = unique_ptr<BaseAST>($4);
+    ast->constInit = unique_ptr<BaseAST>($4);
     $$ = ast;
   } | IDENT ArrayDimen '=' Number {
     auto ast = new SinVarDefAST();
@@ -535,7 +538,7 @@ Stmt
   }  | IDENT ArrPara {
     auto ast = new StmtAST();
     ast->ident = *unique_ptr<string>($1);
-    ast->exp = unique_ptr<BaseAST>($2);
+    ast->Exp = unique_ptr<BaseAST>($2);
     $$ = ast;
   } 
   ;
@@ -777,13 +780,13 @@ PrimaryExp
   } | Number {
     auto ast  = new PrimaryExpAST();
     ast->kind = NUMBER;
-    ast->number = unique_ptr<BaseAST>($1);
+    ast->number = $1;
     ast->Exp = nullptr;
     $$ = ast;
   } | FloatNumber {
     auto ast = new PrimaryExpAST();
     ast->kind = FLOAT;
-    ast->floatNumber = unique_ptr<BaseAST>($1);
+    ast->floatNumber = $1;
     $$ = ast;
   }
   ;

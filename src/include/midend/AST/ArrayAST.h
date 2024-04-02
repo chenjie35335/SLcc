@@ -67,10 +67,13 @@ class MulArrParaAST : public BaseAST {
     void generateGraph() const override;
 };
 
+class ParaTypeAST : public BaseAST {
+  public:
+    int type;
+    void generateGraph() const override {};
+};
+
 #endif
-
-
-
 //1. int a[100];
 //a[100] = {0};
 //define a[exp]  b[var]
