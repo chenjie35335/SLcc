@@ -125,6 +125,20 @@ typedef struct{
     RawBasicBlockP target;
 } RawJump;
 
+typedef struct{
+    RawValueP src;
+    RawValueP index;
+}RawGetPtr;
+
+typedef struct {
+    RawValueP src;
+    RawValueP index;
+}RawGetElement;
+
+typedef struct {
+    RawSlice elements; 
+}RawAggregate;
+
 typedef struct{//其他剩余两个参数貌似当前用不到
     /// condition
     RawValueP cond;
@@ -147,6 +161,9 @@ struct ValueKind {
         RawCall call;
         RawFuncArgs funcArgs;
         RawGlobal global;
+        RawGetPtr getptr;
+        RawGetElement getelement;
+        RawAggregate aggregate;
         // 其他数据类型
     } data;
 };

@@ -46,6 +46,9 @@ void SinCompUnitAST::generateGraph() const{
             varGlobal->generateGraphGlobal();
             break;
         }
+        case COMP_ARR:{
+            break;
+        }
         default:
             assert(0);
       }
@@ -86,7 +89,17 @@ void FuncFParamsAST::generateGraph() const{
 }
 //单个参数访问
 void SinFuncFParamAST::generateGraph(int &index) const{
-    generateRawValueArgs(ident,index);
+    switch(type) {
+        case PARA_VAR:
+            generateRawValueArgs(ident,index);
+            break;
+        case PARA_ARR_SIN:
+            //generateRawValueArgs(ident,index);
+            break;
+        case PARA_ARR_MUL:
+            //generateRawValueArgs(ident,index);
+            break;
+    } 
 }
 
 //这个blockAST的generateGraph对于分支语句来说是个重点

@@ -17,6 +17,9 @@ void DeclAST::generateGraph() const
     case DECLAST_VAR:
         VarDecl->generateGraph();
         break;
+    case DECLAST_ARR:
+        //VarDecl->generateGraph();
+        break;
     default:
         assert(0);
     }
@@ -97,7 +100,9 @@ void ConstDeclAST::generateGraph() const {
 
 void SinConstDefAST::generateGraph() const{
   signTable.constMulDef(ident);
-  int value = ConstExp->calc();
+  int value = constExp->calc();
   signTable.insertConst(ident,value);
 }
+
+
 

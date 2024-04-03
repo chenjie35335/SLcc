@@ -14,6 +14,8 @@ void SinExpAST::generateGraph(string &sign) const
   case SINEXPAST_EXP:
     Exp->generateGraph(sign);
     break;
+  case SINEXPAST_NULL:
+    break;
   default:
     assert(0);
   }

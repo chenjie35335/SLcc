@@ -61,7 +61,13 @@ enum {
     /// function args
     RVT_FUNC_ARGS,
     /// global 
-    RVT_GLOBAL
+    RVT_GLOBAL,
+    /// getptr
+    RVT_GET_PTR,
+    /// getelement
+    RVT_GET_ELEMENT,
+    /// aggregate
+    RVT_AGGREGATE,
 }RawValueTag;
 
 // kind of RawSlice
