@@ -31,5 +31,12 @@ int main(int argc, const char *argv[]) {
       ast->generateGraph(irGraph);
       backend(irGraph);
   }
+  else if (strcmp(mode,"-koopa") == 0)
+  {
+    RawProgramme* irGraph;
+    ast->generateGraph(irGraph);
+    GeneratorIRTxt(irGraph);
+  }
+  
   return 0;
 }
